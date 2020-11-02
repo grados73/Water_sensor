@@ -25,24 +25,25 @@ const char* password = "gradowscyc";
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
 
-const int motionSensor = 14; // PIR Motion Sensor
-bool motionDetected = false;
+const int waterSensor = 14; // PIR Motion Sensor
+bool waterDetected = false;
 
 // Indicates when motion is detected
-void ICACHE_RAM_ATTR detectsMovement() {
-  //Serial.println("MOTION DETECTED!!!");
-  motionDetected = true;
+void ICACHE_RAM_ATTR detectsWater() {
+  //Serial.println("WATER DETECTED!!!");
+  waterDetected = true;
 }
 
 void setup() {
   Serial.begin(115200);
   client.setInsecure();
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);  
+  digitalWrite(LED_BUILTIN, HIGH);
 
   // PIR Motion Sensor mode INPUT_PULLUP
-  pinMode(motionSensor, INPUT_PULLUP);
+  pinMode(waterSensor, INPUT_PULLUP);
   // Set motionSensor pin as interrupt, assign interrupt function and set RISING mode
-  attachInterrupt(digitalPinToInterrupt(motionSensor), detectsMovement, FALLING);
+  attachInterrupt(digitalPinToInterrupt(waterSensor), detectsWater, FALLING);
 
   // Attempt to connect to Wifi network:
   Serial.print("Connecting Wifi: ");
@@ -65,10 +66,10 @@ void setup() {
 }
 
 void loop() {
-  if(motionDetected){
+  if(waterDetected){
     bot.sendMessage(CHAT_ID, "Water detected!!", "");
     Serial.println("Water Detected");
     digitalWrite(LED_BUILTIN, LOW); 
-    motionDetected = false;
+    waterDetected = false;
   }
 }
