@@ -79,21 +79,23 @@ void setup() {
 
 void loop() {
 
-if (millis() > lastTimeBotRan + botRequestDelay)  {
-    int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
-    while(numNewMessages) {
-      Serial.println("got response");
-      handleNewMessages(numNewMessages);
-      numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+// SPRAWDZA CZY SA NOWE WIAODMOSCI CO botRequestDelay (1s)
+    if (millis() > lastTimeBotRan + botRequestDelay)  {
+        int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+        while(numNewMessages) {
+          Serial.println("got response");
+          handleNewMessages(numNewMessages);
+          numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+        }
+        lastTimeBotRan = millis();
+      }
+// JEŚLI WYKRYTO WODE NA SENSORZE
+    if(waterDetected){
+        bot.sendMessage(CHAT_ID, "Water detected!!", "");
+        Serial.println("Water Detected");
+        digitalWrite(LED_BUILTIN, LOW); 
+        waterDetected = false;
     }
-    lastTimeBotRan = millis();
-  }
-  if(waterDetected){
-    bot.sendMessage(CHAT_ID, "Water detected!!", "");
-    Serial.println("Water Detected");
-    digitalWrite(LED_BUILTIN, LOW); 
-    waterDetected = false;
-  }
 
 }
 
@@ -102,29 +104,29 @@ if (millis() > lastTimeBotRan + botRequestDelay)  {
 String getReadings(){
   float h = dht.readHumidity();
   float t = dht.readTemperature();
-  String message = "Temperature: " + String(t) + " ºC \n";
-  message += "Humidity: " + String (h) + " % \n";
+  String message = "Temperatura: " + String(t) + " ºC \n";
+  message += "Wilgotnosc: " + String (h) + " % \n";
   return message;
 }
 
-//Handle what happens when you receive new messages
+//Funkcja do obslugi otrzymanych wiaodmosci
 void handleNewMessages(int numNewMessages) {
   Serial.println("handleNewMessages");
   Serial.println(String(numNewMessages));
 
-  for (int i=0; i<numNewMessages; i++) {
+  for (int i=0; i<numNewMessages; i++) { // sprawdza osiagalnosc wiadomosci
     // Chat id of the requester
-    String chat_id = String(bot.messages[i].chat_id);
-    if (chat_id != CHAT_ID){
+    String chat_id = String(bot.messages[i].chat_id); //sprawdza id od kogo ta wiadomosc przyszla i czy jest to wiadomosc od nas
+    if (chat_id != CHAT_ID){ // wiadomosc od kogos obcego, ignoruje
       bot.sendMessage(chat_id, "Unauthorized user", "");
       continue;
     }
-    
+    // jesli jest to wiadomosc od autoryzowanego uzytkownika to zapisuje ja do zmiennej text
     // Print the received message
     String text = bot.messages[i].text;
     Serial.println(text);
 
-    String from_name = bot.messages[i].from_name;
+    String from_name = bot.messages[i].from_name; // zapisuje od kogo otrzymal wiadomosc
 
     if (text == "/start") {
       String welcome = "Welcome, " + from_name + ".\n";
