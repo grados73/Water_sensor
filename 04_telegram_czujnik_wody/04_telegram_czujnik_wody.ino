@@ -9,6 +9,7 @@
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
 #include <ArduinoJson.h>
+#include "DHT.h"
 
 // Replace with your network credentials
 const char* ssid = "internet_kamil";
@@ -21,6 +22,10 @@ const char* password = "gradowscyc";
 // Also note that you need to click "start" on a bot before it can
 // message you
 #define CHAT_ID "948004899"
+#define DHTTYPE DHT11   // DHT 11
+#define DHTPIN 5     // Digital pin connected to the DHT sensor
+// Initialize DHT sensor.
+DHT dht(DHTPIN, DHTTYPE);
 
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
@@ -40,9 +45,12 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);  
   digitalWrite(LED_BUILTIN, HIGH);
 
-  // PIR Motion Sensor mode INPUT_PULLUP
+  //DHT
+   dht.begin();
+
+  // water Sensor mode INPUT_PULLUP
   pinMode(waterSensor, INPUT_PULLUP);
-  // Set motionSensor pin as interrupt, assign interrupt function and set RISING mode
+  // Set waterSensor pin as interrupt, assign interrupt function and set RISING mode
   attachInterrupt(digitalPinToInterrupt(waterSensor), detectsWater, FALLING);
 
   // Attempt to connect to Wifi network:
@@ -66,10 +74,20 @@ void setup() {
 }
 
 void loop() {
+  
+            float h = dht.readHumidity();
+            Serial.println("/nWilgornosc = ");
+            Serial.println(h);
+            // Read temperature as Celsius (the default)
+            float t = dht.readTemperature();
+            Serial.println("/ntemperatura = ");
+            Serial.println(t);
+  
   if(waterDetected){
     bot.sendMessage(CHAT_ID, "Water detected!!", "");
     Serial.println("Water Detected");
     digitalWrite(LED_BUILTIN, LOW); 
     waterDetected = false;
   }
+  delay(1000);
 }
