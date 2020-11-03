@@ -35,6 +35,10 @@ Author:Grad73
 //Pin do którego jest podłączony sensor wody i flaga od wykrycia wody
     const int waterSensor = 14; // 
     bool waterDetected = false;
+    
+    int flagaAlarm = 0; // podnoszona jest po wykryciu wody
+    unsigned long previousMillis = 0; // zmienna zapisujaca czas wykrycia wody
+    int dlugoscAlarmu = 2000; // czas w [ms] jak dlugo ma trwac alarm po wykryciu wody
 
 // Indicates when motion is detected
     void ICACHE_RAM_ATTR detectsWater() {
@@ -79,6 +83,8 @@ void setup() {
 
 void loop() {
 
+unsigned long currentMillis = millis();
+
 // SPRAWDZA CZY SA NOWE WIAODMOSCI CO botRequestDelay (1s)
     if (millis() > lastTimeBotRan + botRequestDelay)  {
         int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
@@ -95,7 +101,17 @@ void loop() {
         Serial.println("Water Detected");
         digitalWrite(LED_BUILTIN, LOW); 
         waterDetected = false;
+        previousMillis = currentMillis;
+        flagaAlarm =1;
     }
+
+// WYLACZANIE ALARMU PO CZASIE dlugoscAlarmu
+   if(flagaAlarm == 1){
+       if (currentMillis - previousMillis >= dlugoscAlarmu) {
+          digitalWrite(LED_BUILTIN, HIGH);
+          flagaAlarm = 0; 
+        }
+   }
 
 }
 
