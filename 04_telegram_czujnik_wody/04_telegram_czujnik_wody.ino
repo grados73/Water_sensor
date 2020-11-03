@@ -23,6 +23,9 @@ Author:Grad73
     #define DHTPIN 5     // Digital pin connected to the DHT sensor
     DHT dht(DHTPIN, DHTTYPE);// Initialize DHT sensor.
 
+//Buzzer alarmowy
+    #define BUZZERPIN 10
+
 //Stworzenie nowego klienta WiFi
     WiFiClientSecure client;
 //Stworzenie nowego bota
@@ -52,6 +55,9 @@ void setup() {
   //Dioda wbudowana sygnalizuje wykrycie wody
   pinMode(LED_BUILTIN, OUTPUT);  
   digitalWrite(LED_BUILTIN, HIGH);
+  //Buzzer
+  pinMode(BUZZERPIN, OUTPUT);  
+  digitalWrite(BUZZERPIN, HIGH);
 
   //DHT wlaczenie czujnika
    dht.begin();
@@ -100,6 +106,7 @@ unsigned long currentMillis = millis();
         bot.sendMessage(CHAT_ID, "Water detected!!", "");
         Serial.println("Water Detected");
         digitalWrite(LED_BUILTIN, LOW); 
+        digitalWrite(BUZZERPIN, LOW);
         waterDetected = false;
         previousMillis = currentMillis;
         flagaAlarm =1;
@@ -109,6 +116,7 @@ unsigned long currentMillis = millis();
    if(flagaAlarm == 1){
        if (currentMillis - previousMillis >= dlugoscAlarmu) {
           digitalWrite(LED_BUILTIN, HIGH);
+          digitalWrite(BUZZERPIN, HIGH);
           flagaAlarm = 0; 
         }
    }
