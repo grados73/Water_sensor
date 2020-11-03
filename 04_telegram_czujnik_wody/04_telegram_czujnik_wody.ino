@@ -26,6 +26,11 @@ Author:Grad73
 //Buzzer alarmowy
     #define BUZZERPIN 10
 
+//ADC 
+    const int analogInPin = A0; 
+    int sensorValue = 0;  // value read from the pot
+    int outputValue = 0;  // value to output to a PWM pin   
+    
 //Stworzenie nowego klienta WiFi
     WiFiClientSecure client;
 //Stworzenie nowego bota
@@ -128,8 +133,10 @@ unsigned long currentMillis = millis();
 String getReadings(){
   float h = dht.readHumidity();
   float t = dht.readTemperature();
+  float v = analogRead(analogInPin);
   String message = "Temperatura: " + String(t) + " ºC \n";
   message += "Wilgotnosc: " + String (h) + " % \n";
+  message += "Napiecie zasilania:: " + String (v) + " V \n";
   return message;
 }
 
