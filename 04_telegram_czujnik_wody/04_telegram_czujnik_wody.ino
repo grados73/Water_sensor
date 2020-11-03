@@ -133,7 +133,7 @@ unsigned long currentMillis = millis();
 String getReadings(){
   float h = dht.readHumidity();
   float t = dht.readTemperature();
-  float v = analogRead(analogInPin);
+  float v = analogRead(analogInPin)/166;
   String message = "Temperatura: " + String(t) + " ºC \n";
   message += "Wilgotnosc: " + String (h) + " % \n";
   message += "Napiecie zasilania:: " + String (v) + " V \n";
