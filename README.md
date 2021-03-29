@@ -5,7 +5,6 @@
 * [General info](#general-info)
 * [Screenshots](#screenshots)
 * [Technologies](#technologies)
-* [Setup](#setup)
 * [Features](#features)
 * [Status](#status)
 * [Inspiration](#inspiration)
@@ -17,15 +16,13 @@ The device, if it detects water on any of the two connected sensors, sends messa
 
 ## Screenshots
 ![Message](./Images/Telegram_message.jpg)
+![PCB2](./Images/pcb1.bmp)
 ![PCB](./Images/PCB1.jpg)
 
 ## Technologies
 C,
 Arduino IDE.
 
-## Code Examples
-Show examples of usage:
-`put-your-code-here`
 
 ## Features
 -Send message via a Telegram when detect water,
