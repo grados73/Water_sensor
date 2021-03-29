@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name MCU_Module)(type Legacy)(uri D:/Projekty/00_ESP8266/04_telegram_czujnik_wody/kicad-symbols-master/MCU_Module.lib)(options "")(descr ""))
+  (lib (name grad73_library)(type Legacy)(uri ${KIPRJMOD}/grad73_library.lib)(options "")(descr ""))
+)

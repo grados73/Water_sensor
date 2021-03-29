@@ -1,0 +1,19 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP NodeMCU_ESP_DEVKIT
+D Moduł NodeMCU WiFi ESP8266 - 4MB - Waveshare 16608
+F https://www.espressif.com/sites/default/files/documentation/0a-esp8266ex_datasheet_en.pdf
+$ENDCMP
+#
+$CMP buzzer_z_gen
+D buzzer z generatorem zielony
+K buzzer
+$ENDCMP
+#
+$CMP przetwornica_U1v10f5_Pololu
+D step-up 5v przetwornica
+K przetwornica
+F https://www.tme.eu/Document/5e8a94132252e76cb27a8b9f683a6282/POLOLU-2564.pdf
+$ENDCMP
+#
+#End Doc Library

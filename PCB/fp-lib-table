@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name grados73)(type KiCad)(uri ${KIPRJMOD}/grados73.pretty)(options "")(descr ""))
+)
